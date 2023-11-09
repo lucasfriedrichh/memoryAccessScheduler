@@ -18,6 +18,7 @@ std::vector<int> geraValores() {
 
 // First in First Out
 void fcfs(vector<int> values, int posicaoInicial) {
+    //Init
     cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
     cout << "Original [";
     for (size_t i = 0; i < values.size(); i++) { 
@@ -28,11 +29,13 @@ void fcfs(vector<int> values, int posicaoInicial) {
     cout << "]" << endl << endl;
     cout << "========== Algoritmo FCFS! ==========" << endl;
 
+    //Variables
     size_t l = 0;
     size_t r;
     size_t voltas = values.size();
     int deslocamento = 0;
 
+    //Algorithm
     while (l < voltas) {
         cout << "Acessou " << values[l] << "[";
         if (l == 0) deslocamento = abs(posicaoInicial - values[l]);
@@ -52,21 +55,25 @@ void fcfs(vector<int> values, int posicaoInicial) {
 
 // Maior para a menor
 void sstf(vector<int> values, int posicaoInicial){
+    //Init
     cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
     cout << "Original [";
     for (size_t i = 0; i < values.size(); i++) { 
         cout << values[i];
         if (i != values.size() - 1)
             cout << " - ";
-    }
+    }    
+    cout << "]" << endl << endl;
+    cout << "========== Algoritmo FCFS! ==========" << endl;
     
+    // Variables
     vector<int> sortedValues = values;
     sort(sortedValues.begin(), sortedValues.end(), greater<int>());
     int ptr; //Position To Remove
     int deslocamento = 0;
     int temp;
-    cout << "]" << endl << endl;
-    cout << "========== Algoritmo FCFS! ==========" << endl;
+
+    //Algorithm
     for (int i = 0; i < 10; i++){
         if (i == 0) deslocamento = abs(posicaoInicial - sortedValues[0]);
         else deslocamento += abs(temp - sortedValues[0]);
@@ -78,9 +85,50 @@ void sstf(vector<int> values, int posicaoInicial){
                 break;
             }
         }
-        
         values.erase(values.begin() + ptr);
+        for(size_t i = 0; i<values.size(); i++){
+            cout<< values[i];
+            if(i != values.size()-1) cout<< " - ";
+        }
+        cout << "] Ja deslocou " << deslocamento << " vezes" << endl;
+        temp = sortedValues[0];
+        sortedValues.erase(sortedValues.begin());
+    }
+    cout << "SSTF - Quantidade total de deslocamentos: " << deslocamento << endl << endl;
+}
 
+void clook(vector<int> values, int posicaoInicial){
+    //Init
+    cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
+    cout << "Original [";
+    for (size_t i = 0; i < values.size(); i++) { 
+        cout << values[i];
+        if (i != values.size() - 1)
+            cout << " - ";
+    }
+    cout << "]" << endl << endl;
+    cout << "===== Algoritmo C-look =====" << endl;
+
+    // Variables
+    vector<int> sortedValues = values;
+    sort(sortedValues.begin(), sortedValues.end());
+    int ptr; //Position To Remove
+    int deslocamento = 0;
+    int temp;
+
+    //Algorithm
+    for (int i = 0; i < 10; i++){
+        if (i == 0) deslocamento = abs(posicaoInicial - sortedValues[0]);
+        else deslocamento += abs(temp - sortedValues[0]);
+
+        cout << "Acessou " << sortedValues[0] << "[";
+        for(size_t i = 0; i<values.size(); i++){
+            if (values[i] == sortedValues[0]){
+                ptr = i; 
+                break;
+            }
+        }
+        values.erase(values.begin() + ptr);
         for(size_t i = 0; i<values.size(); i++){
             cout<< values[i];
             if(i != values.size()-1) cout<< " - ";
@@ -93,6 +141,7 @@ void sstf(vector<int> values, int posicaoInicial){
 
 }
 
+
 int main(){
     // vector<int> values = geraValores();
     vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
@@ -103,6 +152,9 @@ int main(){
 
     // fcfs(values, inicial);
     // sstf(values, inicial);
+
+
+    clook(values, inicial);
     
     return 1;
 }
