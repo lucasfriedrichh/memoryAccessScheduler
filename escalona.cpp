@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+bool goUp;
+
 vector<int> geraValores() {
     srand(static_cast<unsigned>(time(nullptr)));
     vector<int> valores;
@@ -14,6 +16,18 @@ vector<int> geraValores() {
         }
     }
     return valores;
+}
+
+void decideSide(vector<int> values, int pontoInit){
+   int minDiff=200, value;
+    for(int i=0; i<10; i++){
+        int aux =abs(values[i]-pontoInit);
+        if(aux<minDiff && values[i]!=pontoInit){
+            minDiff=aux;value = values[i];
+        }
+    }
+    if(value>pontoInit)goUp=true;
+    else goUp=false;
 }
 
 void print(vector<int> values, int access, int deslocamentos){
@@ -98,6 +112,21 @@ void sstf(vector<int> values, int posicaoInicial){
 }
 
 
+void confereDireita(){}
+void confereEsquerda(){}
+
+
+// Algorithm Scan
+void scan(vector<int> values, int posicaoInicial){
+    for (size_t i = 0; i < values.size(); i++){
+        if(goUp)
+            confereDireita();
+        else
+            confereEsquerda();
+    }
+    
+}
+
 int main(){
     //Teste
     vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
@@ -105,10 +134,14 @@ int main(){
 
     // vector<int> values = geraValores();
     // int inicial = 1 + rand() % 99;
+
+    decideSide(values, inicial);
     cout << "===== Gerenciador de escalonamento de acesso a disco =====" << endl << endl;
 
     // fcfs(values, inicial);
-    sstf(values, inicial);
+    // sstf(values, inicial);
+
+    scan(values, inicial);
     
     return 1;
 }
