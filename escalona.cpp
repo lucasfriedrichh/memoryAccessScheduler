@@ -1,3 +1,5 @@
+// 
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -107,7 +109,6 @@ void sstf(vector<int> values, int posicaoInicial){
 
 }
 
-
 //Go Up
 void goDown(int posicaoInicial, bool first){
     int access  = posicaoInicial;
@@ -139,16 +140,16 @@ void goDown(int posicaoInicial, bool first){
             }
             access--;
         }
-    if(!zero && first){
+    if(requisitions.size() == (size_t) 0) done = true;
+
+    if(!zero && first && !done){
         deslocamentos += lastPoint;
         lastPoint = 0;
         print(requisitions, 0, deslocamentos);
         zero = true;
     }
 
-    if(requisitions.size() == (size_t) 0) done = true;
 }
-
 
 //go Up
 void goUp(int posicaoInicial, bool first){
@@ -181,13 +182,13 @@ void goUp(int posicaoInicial, bool first){
         }
         access++;            
     }
-    if(!nn && first){
+    if(requisitions.size() == (size_t) 0) done = true;
+    if(!nn && first && !done){
         deslocamentos += abs(99 - (int)lastPoint);
         lastPoint = 99;
         print(requisitions, 99, deslocamentos);
         nn=true;
     }
-    if(requisitions.size() == (size_t) 0) done = true;
 }
 
 // Algorithm Scan
@@ -265,29 +266,60 @@ void resetValues(vector<int> values){
     requisitions = values;
 }
 
+//C-LOOK
 void clook(int posicaoInicial){
-    
+    //Init
+    cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
+    cout << "Original [";
+    for (size_t i = 0; i < requisitions.size(); i++) { 
+        cout << requisitions[i];
+        if (i != requisitions.size() - 1)
+            cout << " - ";
+    }
+    cout << "]" << endl << endl;
+    cout << "========= Algoritmo C-look ==========" << endl;
+
+    // Variables
+    bool scanUp;
+    done = false;
+
+    // Algorithm
+    if (posicaoInicial > 50)
+        scanUp = true;
+
+    if (!scanUp){
+        goDown(posicaoInicial, true);
+        goUp(posicaoInicial, false);
+    }else{
+        goUp(posicaoInicial, true);
+        goDown(posicaoInicial, false);
+    }
+    cout << "C-look - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
+
+
+
 }
 
 
 int main(){
     //Teste
-    // vector<int> values = {30, 70, 54, 59, 89, 64, 87, 38, 05, 40};
-    // int inicial = 7;
+    vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
+    int inicial = 88;
 
-    vector<int> values = geraValores();
-    int inicial = 1 + rand() % 99;
+    // vector<int> values = geraValores();
+    // int inicial = 1 + rand() % 99;
     cout << "===== Gerenciador de escalonamento de acesso a disco =====" << endl << endl;
     // fcfs(values, inicial);
     // sstf(values, inicial);
 
-    // resetValues(values);
-    // scan(inicial);
+    resetValues(values);
+    scan(inicial);
     
     // resetValues(values);
     // circular(inicial);
 
-    resetValues(values);
+    // resetValues(values);
+    // clook(inicial);
 
     return 1;
 }
