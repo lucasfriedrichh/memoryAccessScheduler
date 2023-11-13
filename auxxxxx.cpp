@@ -2,11 +2,6 @@
 using namespace std;
 
 int deslocamentos;
-bool done;
-vector<int> requisitions;
-int lastPoint;
-bool nn, zero;
-
 
 vector<int> geraValores() {
     srand(static_cast<unsigned>(time(nullptr)));
@@ -108,29 +103,19 @@ void sstf(vector<int> values, int posicaoInicial){
 }
 
 
-//Go Up
+///Go Up
 void goDown(int posicaoInicial, bool first){
-    int access  = posicaoInicial;
-    if(!first && !done){
-        if (!nn){
-            deslocamentos += (int)lastPoint;
-            lastPoint = 99;
-            print(requisitions, 99, deslocamentos);
-            nn=true;
-        }
-        access = 99;
-    }else{
-        lastPoint = posicaoInicial;
-    }
-
-    while(access >= 0){
-            int ptr;
+    if(first){
+        done = false;
+        deslocamentos = 0;
+        int access = posicaoInicial;
+        while(access >=0){
+            int ptr = 0;
             for (size_t i = 0; i < requisitions.size(); i++){
-                if (requisitions[i] == access){
-                    if(access == 0) zero=false;
-
-                    deslocamentos += abs(access - (int)lastPoint);
-                    lastPoint = access;
+                if(requisitions[i] == access){
+                    deslocamentos += abs(requisitions[i] - (int)posicaoInicial);
+                    posicaoInicial = requisitions[i];
+                    lastPoint = requisitions[i];
                     ptr = i;
                     requisitions.erase(requisitions.begin() + ptr);
                     print(requisitions, access, deslocamentos);
@@ -139,65 +124,79 @@ void goDown(int posicaoInicial, bool first){
             }
             access--;
         }
-    if(!zero && first){
-        deslocamentos += lastPoint;
-        lastPoint = 0;
-        print(requisitions, 0, deslocamentos);
-        zero = true;
+        if(requisitions.size() == (size_t) 0) done = true;
+    }else if (!done){
+        int access = 100;
+        while(posicaoInicial <= access){
+            int ptr = 0;
+            for (size_t i = 0; i < requisitions.size(); i++){
+                if(requisitions[i] == access){
+                    deslocamentos += abs(requisitions[i] - (int)posicaoInicial);
+                    posicaoInicial = requisitions[i];
+                    lastPoint = requisitions[i];
+                    ptr = i;
+                    requisitions.erase(requisitions.begin() + ptr);
+                    print(requisitions, access, deslocamentos);
+                    break;
+                }
+            }
+            access--;
+        }
+        deslocamentos = 0;
     }
-
-    if(requisitions.size() == (size_t) 0) done = true;
 }
 
 
 //go Up
 void goUp(int posicaoInicial, bool first){
-    int access = posicaoInicial;
-
-    if(!first && !done){
-        if(!zero){
-            deslocamentos += (int)lastPoint;
-            lastPoint = 0;
-            print(requisitions, 0, deslocamentos);
-            zero = true;
+    if(first){
+        done = false; deslocamentos = 0; int access = posicaoInicial;
+        while(access <= 100){
+            int ptr = 0;
+            for (size_t i = 0; i < requisitions.size(); i++){
+                if(requisitions[i] == access){
+                    deslocamentos += abs(requisitions[i] - (int)posicaoInicial);
+                    posicaoInicial = requisitions[i];
+                    ptr = i;
+                    lastPoint = requisitions[i];
+                    requisitions.erase(requisitions.begin() + ptr);
+                    print(requisitions, access, deslocamentos);
+                    break;
+                }
+            }
+            access++;
         }
-        access = 0;
-    }else{
-        lastPoint = posicaoInicial;
-    }
-    while(access < 100){
-        int ptr;
-        for (size_t i = 0; i < requisitions.size(); i++){
-            if (requisitions[i] == access){
-                if(access == 99)nn=false;
-                
-                deslocamentos += abs(access - (int)lastPoint);
-                lastPoint = access;
-                ptr = i;
-                requisitions.erase(requisitions.begin() + ptr);
-                print(requisitions, access, deslocamentos);
-                break;
-            }   
+        if(requisitions.size() == (size_t) 0) done = true;
+    }else if(!done){
+        int access = 0;
+        while (access <= posicaoInicial){
+            int ptr = 0;
+            for (size_t i = 0; i < requisitions.size(); i++){
+            if(requisitions[i] == access){
+                    lastPoint = requisitions[i];
+                    cout << lastPoint << " - Last point" << endl;
+                    deslocamentos += abs(requisitions[i] - lastPoint);
+                    posicaoInicial = requisitions[i];
+                    ptr = i;
+                    requisitions.erase(requisitions.begin() + ptr);
+                    print(requisitions, access, deslocamentos);
+                    break;
+                }
+            }
+            access ++;
         }
-        access++;            
+        deslocamentos = 0;
     }
-    if(!nn && first){
-        deslocamentos += abs(99 - (int)lastPoint);
-        lastPoint = 99;
-        print(requisitions, 99, deslocamentos);
-        nn=true;
-    }
-    if(requisitions.size() == (size_t) 0) done = true;
 }
 
 // Algorithm Scan
-void scan(int posicaoInicial){
+void scan(vector<int> values, int posicaoInicial){
     //Init
     cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
     cout << "Original [";
-    for (size_t i = 0; i < requisitions.size(); i++) { 
-        cout << requisitions[i];
-        if (i != requisitions.size() - 1)
+    for (size_t i = 0; i < values.size(); i++) { 
+        cout << values[i];
+        if (i != values.size() - 1)
             cout << " - ";
     }
     cout << "]" << endl << endl;
@@ -206,88 +205,36 @@ void scan(int posicaoInicial){
 
     // Variables
     bool scanUp;
-    done = false;
 
     // Algorithm
     if (posicaoInicial < 50)
         scanUp = true;
 
     if (!scanUp){
-        goDown(posicaoInicial, true);
-        goUp(posicaoInicial, false);
+        goDown(values, posicaoInicial, true);
+        goUp(values, posicaoInicial, false);
     }else{
-        goUp(posicaoInicial, true);
-        goDown(posicaoInicial, false);
+        goUp(values, posicaoInicial, true);
+        goDown(values, posicaoInicial, false);
     }
-    cout << "SCAN - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
-
-}
-
-void circular(int posicaoInicial){
-    //Init
-    cout << "Posicao inicial da cabeca de leitura e gravacao "<< posicaoInicial << endl;
-    cout << "Original [";
-    for (size_t i = 0; i < requisitions.size(); i++) { 
-        cout << requisitions[i];
-        if (i != requisitions.size() - 1)
-            cout << " - ";
-    }
-    cout << "]" << endl << endl;
-    cout << "====== Algoritmo Circular SCAN ======" << endl;
-
-
-    // Variables
-    bool scanUp;
-    done = false;
-
-    // Algorithm
-    if (posicaoInicial > 50)
-        scanUp = true;
-
-
-    if(scanUp){
-        goUp(posicaoInicial, true);
-        goUp(posicaoInicial, false);
-    }else{
-        goDown(posicaoInicial, true);
-        goDown(posicaoInicial, false);
-    }
-
-    cout << "Circular Scan - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
-
-}
-
-void resetValues(vector<int> values){
-    nn = false;
-    zero =false;
-    deslocamentos = 0; 
-    done = false;
-    requisitions = values;
-}
-
-void clook(int posicaoInicial){
+    
+    
     
 }
-
 
 int main(){
     //Teste
-    // vector<int> values = {30, 70, 54, 59, 89, 64, 87, 38, 05, 40};
-    // int inicial = 7;
+    vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
+    int inicial = 88;
 
-    vector<int> values = geraValores();
-    int inicial = 1 + rand() % 99;
+    // vector<int> values = geraValores();
+    // int inicial = 1 + rand() % 99;
     cout << "===== Gerenciador de escalonamento de acesso a disco =====" << endl << endl;
+
     // fcfs(values, inicial);
     // sstf(values, inicial);
 
-    // resetValues(values);
-    // scan(inicial);
+    scan(values, inicial);
     
-    // resetValues(values);
-    // circular(inicial);
-
-    resetValues(values);
-
     return 1;
 }
