@@ -8,6 +8,7 @@ bool done;
 vector<int> requisitions;
 int lastPoint;
 bool nn, zero;
+bool isClook;
 
 
 vector<int> geraValores() {
@@ -112,8 +113,8 @@ void sstf(vector<int> values, int posicaoInicial){
 //Go Up
 void goDown(int posicaoInicial, bool first){
     int access  = posicaoInicial;
-    if(!first && !done){
-        if (!nn){
+    if(!first && !done ){
+        if (!nn && !isClook){
             deslocamentos += (int)lastPoint;
             lastPoint = 99;
             print(requisitions, 99, deslocamentos);
@@ -142,7 +143,7 @@ void goDown(int posicaoInicial, bool first){
         }
     if(requisitions.size() == (size_t) 0) done = true;
 
-    if(!zero && first && !done){
+    if(!zero && first && !done && !isClook){
         deslocamentos += lastPoint;
         lastPoint = 0;
         print(requisitions, 0, deslocamentos);
@@ -156,7 +157,7 @@ void goUp(int posicaoInicial, bool first){
     int access = posicaoInicial;
 
     if(!first && !done){
-        if(!zero){
+        if(!zero && !isClook){
             deslocamentos += (int)lastPoint;
             lastPoint = 0;
             print(requisitions, 0, deslocamentos);
@@ -183,7 +184,7 @@ void goUp(int posicaoInicial, bool first){
         access++;            
     }
     if(requisitions.size() == (size_t) 0) done = true;
-    if(!nn && first && !done){
+    if(!nn && first && !done && !isClook){
         deslocamentos += abs(99 - (int)lastPoint);
         lastPoint = 99;
         print(requisitions, 99, deslocamentos);
@@ -259,10 +260,11 @@ void circular(int posicaoInicial){
 }
 
 void resetValues(vector<int> values){
-    nn = false;
-    zero =false;
     deslocamentos = 0; 
-    done = false;
+    done= false;
+    isClook= false;
+    zero =false;
+     nn = false;
     requisitions = values;
 }
 
@@ -282,6 +284,7 @@ void clook(int posicaoInicial){
     // Variables
     bool scanUp;
     done = false;
+    isClook = true;
 
     // Algorithm
     if (posicaoInicial > 50)
@@ -289,15 +292,12 @@ void clook(int posicaoInicial){
 
     if (!scanUp){
         goDown(posicaoInicial, true);
-        goUp(posicaoInicial, false);
+        goDown(posicaoInicial, false);
     }else{
         goUp(posicaoInicial, true);
-        goDown(posicaoInicial, false);
+        goUp(posicaoInicial, false);
     }
     cout << "C-look - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
-
-
-
 }
 
 
@@ -309,17 +309,17 @@ int main(){
     // vector<int> values = geraValores();
     // int inicial = 1 + rand() % 99;
     cout << "===== Gerenciador de escalonamento de acesso a disco =====" << endl << endl;
-    // fcfs(values, inicial);
-    // sstf(values, inicial);
+    fcfs(values, inicial);
+    sstf(values, inicial);
 
     resetValues(values);
     scan(inicial);
     
-    // resetValues(values);
-    // circular(inicial);
+    resetValues(values);
+    circular(inicial);
 
-    // resetValues(values);
-    // clook(inicial);
+    resetValues(values);
+    clook(inicial);
 
     return 1;
 }
