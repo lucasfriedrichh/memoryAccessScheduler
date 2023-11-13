@@ -303,11 +303,12 @@ void clook(int posicaoInicial){
 
 int main(){
     //Teste
-    vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
-    int inicial = 88;
+    // vector<int> values = {30, 70, 54, 59, 29, 64, 87, 38, 05, 40};
+    // int inicial = 88;
 
-    // vector<int> values = geraValores();
-    // int inicial = 1 + rand() % 99;
+    //Prod
+    vector<int> values = geraValores();
+    int inicial = 1 + rand() % 99;
     cout << "===== Gerenciador de escalonamento de acesso a disco =====" << endl << endl;
     fcfs(values, inicial);
     sstf(values, inicial);
