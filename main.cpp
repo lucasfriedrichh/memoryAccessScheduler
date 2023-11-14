@@ -1,4 +1,5 @@
-// 
+// Lucas Friedrich - 168238
+// Leonardo Salinet - 179770
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -83,7 +84,7 @@ void sstf(vector<int> values, int posicaoInicial){
             cout << " - ";
     }    
     cout << "]" << endl << endl;
-    cout << "========== Algoritmo FCFS! ==========" << endl;
+    cout << "========== Algoritmo SSTF! ==========" << endl;
 
     //Variables
     size_t access = posicaoInicial;
@@ -205,24 +206,14 @@ void scan(int posicaoInicial){
     cout << "]" << endl << endl;
     cout << "===== Algoritmo Scan (elevador) =====" << endl;
 
-
     // Variables
-    bool scanUp;
     done = false;
 
     // Algorithm
-    if (posicaoInicial < 50)
-        scanUp = true;
-
-    if (!scanUp){
-        goDown(posicaoInicial, true);
-        goUp(posicaoInicial, false);
-    }else{
-        goUp(posicaoInicial, true);
-        goDown(posicaoInicial, false);
-    }
+    goDown(posicaoInicial, true);
+    goUp(posicaoInicial, false);
+    
     cout << "SCAN - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
-
 }
 
 void circular(int posicaoInicial){
@@ -237,26 +228,12 @@ void circular(int posicaoInicial){
     cout << "]" << endl << endl;
     cout << "====== Algoritmo Circular SCAN ======" << endl;
 
-
-    // Variables
-    bool scanUp;
     done = false;
 
-    // Algorithm
-    if (posicaoInicial > 50)
-        scanUp = true;
-
-
-    if(scanUp){
-        goUp(posicaoInicial, true);
-        goUp(posicaoInicial, false);
-    }else{
-        goDown(posicaoInicial, true);
-        goDown(posicaoInicial, false);
-    }
-
+    goUp(posicaoInicial, true);
+    goUp(posicaoInicial, false);
+    
     cout << "Circular Scan - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
-
 }
 
 void resetValues(vector<int> values){
@@ -282,24 +259,14 @@ void clook(int posicaoInicial){
     cout << "========= Algoritmo C-look ==========" << endl;
 
     // Variables
-    bool scanUp;
     done = false;
     isClook = true;
 
-    // Algorithm
-    if (posicaoInicial > 50)
-        scanUp = true;
+    goUp(posicaoInicial, true);
+    goUp(posicaoInicial, false);
 
-    if (!scanUp){
-        goDown(posicaoInicial, true);
-        goDown(posicaoInicial, false);
-    }else{
-        goUp(posicaoInicial, true);
-        goUp(posicaoInicial, false);
-    }
     cout << "C-look - Quantidade total de deslocamentos: " << deslocamentos << endl << endl;
 }
-
 
 int main(){
     //Teste
