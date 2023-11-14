@@ -289,5 +289,5 @@ int main(){
     resetValues(values);
     clook(inicial);
 
-    return 1;
+    return 0;
 }
