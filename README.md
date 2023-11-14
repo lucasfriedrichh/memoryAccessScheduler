@@ -6,6 +6,7 @@ Operating Systems 2 work, simulator of a memory access scheduler made in C++;
 #### To be able to run the program, the Linux operating system must be used.
 
 On start:
+
 ![image](https://github.com/lucasfriedrichh/memoryAccessScheduler/assets/91904246/76f2a8f8-ef9c-4d8a-aa0b-d4cbf643896c)
 
 
