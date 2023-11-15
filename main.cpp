@@ -241,7 +241,7 @@ void resetValues(vector<int> values){
     done= false;
     isClook= false;
     zero =false;
-     nn = false;
+    nn = false;
     requisitions = values;
 }
 
